@@ -12,7 +12,7 @@ function Home() {
 
   const navigate = useNavigate();
 
-  const [errors, setErrors] = useState({});
+  const [errors] = useState({});
 
   const handleInput = (event) => {
     setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
@@ -21,36 +21,9 @@ function Home() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+/;
-    const password_pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const username_pattern = /^[a-zA-Z0-9]{3,}$/; // alpha-numeric character
-
     let newErrors = {};
 
-    if (!values.email) {
-      newErrors.email = 'Email should not be empty';
-    } else if (!email_pattern.test(values.email)) {
-      newErrors.email = 'Invalid email format';
-    }
-
-    if (!values.password) {
-      newErrors.password = 'Password should not be empty';
-    } else if (!password_pattern.test(values.password)) {
-      newErrors.password = 'Password must be at least 8 characters long and include special characters, uppercase and lowercase letters, and numbers';
-    }
-
-    if (!values.username) {
-      newErrors.username = 'Username should not be empty';
-    } else if (!username_pattern.test(values.username)) {
-      newErrors.username =
-        'Username must be at least 3 characters long and can only contain alphanumeric characters';
-    }
-
-    setErrors(newErrors);
-
-    // Check if there are any errors before making the signup request
     if (!newErrors.email && !newErrors.password && !newErrors.username) {
-      // Send the signup request to your server
       axios
         .post('http://localhost:8081/signup', values)
         .then((res) => {
