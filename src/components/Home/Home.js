@@ -5,10 +5,24 @@ import Nav from '../Navigation/nav';
 function Home() {
   const [values, setValues] = useState({
     name: '',
-    username: '',
+    dob: '',
+    phone: '',
     email: '',
-    password: '',
+    occupation: '',
+    income: '',
+    payslip1:'',
+    payslip2:'',
   });
+  const [files, setFiles] = useState({
+    payslip1: null,
+    payslip2: null,
+});
+
+
+const handleFileChange = (event) => {
+    const { name, files } = event.target;
+    setFiles(prev => ({ ...prev, [name]: files[0] }));
+};
 
   const navigate = useNavigate();
 
@@ -24,14 +38,22 @@ function Home() {
     let newErrors = {};
 
     if (!newErrors.email && !newErrors.password && !newErrors.username) {
+      const formData = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value);
+    });
+
+    Object.entries(files).forEach(([key, file]) => {
+        if (file) formData.append(key, file);
+    });
       axios
-        .post('http://localhost:8081/signup', values)
+        .post('http://localhost:8081/application', formData)
         .then((res) => {
-          navigate('/login');
+          navigate('/');
         })
         .catch((err) => {
           console.log(err);
-          alert('An error occurred during signup.');
+          alert('An error occurred .');
         });
     }
   };
@@ -50,6 +72,7 @@ function Home() {
               <input
                 type='text'
                 id='name'
+                required
                 placeholder='Enter name'
                 name='name'
                 onChange={handleInput}
@@ -62,9 +85,10 @@ function Home() {
             <div className='mb-3'>
               <input
                 type='text'
-                id='username'
-                placeholder='Enter Username'
-                name='username'
+                id='dob'
+                required
+                placeholder='Enter dob [dd/mm/yyyy]'
+                name='dob'
                 onChange={handleInput}
                 className='form-control rounded-0'
                 autoComplete='off'
@@ -74,9 +98,23 @@ function Home() {
 
             <div className='mb-3'>
               <input
+                type='text'
+                required
+                id='phone'
+                placeholder='Enter Phone number'
+                name='phone'
+                onChange={handleInput}
+                className='form-control rounded-0'
+                autoComplete='off'
+              />
+              {errors.email && <span className='text-danger'>{errors.email}</span>}
+            </div>
+            <div className='mb-3'>
+              <input
                 type='email'
+                required
                 id='email'
-                placeholder='Enter email'
+                placeholder='Enter email Id'
                 name='email'
                 onChange={handleInput}
                 className='form-control rounded-0'
@@ -87,15 +125,53 @@ function Home() {
 
             <div className='mb-3'>
               <input
-                type='password'
-                id='password'
-                placeholder='Enter Password'
-                name='password'
+                type='occupation'
+                required
+                id='occupation'
+                placeholder='Enter occupation'
+                name='occupation'
                 onChange={handleInput}
                 className='form-control rounded-0'
               />
               {errors.password && <span className='text-danger'>{errors.password}</span>}
             </div>
+            <div className='mb-3'>
+              <input
+                type='income'
+                required
+                id='income'
+                placeholder='Enter income per month'
+                name='income'
+                onChange={handleInput}
+                className='form-control rounded-0'
+              />
+              {errors.password && <span className='text-danger'>{errors.password}</span>}
+            </div>
+            <div className='mb-3'>
+              <label>Upload Payslip1 / Income Proof</label>
+    <input 
+        type='file' 
+        required
+        id='payslip1' 
+        accept=".pdf" 
+        onChange={handleFileChange} 
+        name='payslip1' 
+        className='form-control rounded-0'
+    />
+    {errors.payslip1 && <span className='text-danger'>{errors.payslip1}</span>}
+</div>
+<div className='mb-3'>
+<label>Upload Payslip 2 </label>
+    <input 
+        type='file' 
+        id='payslip2' 
+        accept=".pdf" 
+        onChange={handleFileChange} 
+        name='payslip2' 
+        className='form-control rounded-0'
+    />
+    {errors.payslip2 && <span className='text-danger'>{errors.payslip2}</span>}
+</div>
 
             <div>
               <div className='col'>

@@ -12,6 +12,18 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(bodyParser.json());
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function(req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+
 const con = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -45,6 +57,32 @@ app.post('/signup', (req, res) => {
         return res.json(data);
     })
   })
+app.post('/application', upload.fields([{ name: 'payslip1' }, { name: 'payslip2' }]), (req, res) => {
+    
+    // Get the paths of the uploaded files
+    const payslip1Path = req.files.payslip1[0].path;
+    const payslip2Path = req.files.payslip2[0].path;
+
+    const sql = "INSERT INTO customerapplication (`name`,`dob`,`phone`,`email`,`occupation`,`income`,`payslip1Path`,`payslip2Path`) VALUES (?)";
+    
+    const values = [
+        req.body.name,
+        req.body.dob,
+        req.body.phone,
+        req.body.email,
+        req.body.occupation,
+        req.body.income,
+        payslip1Path,
+        payslip2Path
+    ];
+
+    con.query(sql,[values], (err, data) => {
+        if(err) {
+            return res.json("Error");
+        }
+        return res.json(data);
+    });
+});
 
   app.post('/login', (req, res) => {
     const { email, password } = req.body;
