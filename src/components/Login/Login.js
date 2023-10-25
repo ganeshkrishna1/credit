@@ -34,7 +34,7 @@ function Login() {
         .post('http://localhost:8081/login', values)
         .then((res) => {
           if (res.data.Status === 'Success') {
-            navigate('/');
+            navigate('/admin');
           } else {
             navigate('/signup');
             alert('Invalid Credentials. Please Register.');
