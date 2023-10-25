@@ -83,7 +83,14 @@ app.post('/application', upload.fields([{ name: 'payslip1' }, { name: 'payslip2'
         return res.json(data);
     });
 });
+app.get('/getapplications',(req,res)=>{
+  const sql="SELECT * FROM customerapplication";
+  con.query(sql,(err,result)=>{
+      if(err) return res,json({Error:"Got an error in the sql"});
+      return res.json({Status:"Success",Result:result})
 
+  })
+})
   app.post('/login', (req, res) => {
     const { email, password } = req.body;
     const query = 'SELECT * FROM user WHERE email = ? AND password = ?';
@@ -99,3 +106,36 @@ app.post('/application', upload.fields([{ name: 'payslip1' }, { name: 'payslip2'
       }
     });
   });
+  app.put('/updateStatus', (req, res) => {
+    const { id, stat } = req.body;
+
+    if (!id || !stat) {
+        return res.status(400).json({ success: false, message: 'ID and status are required.' });
+    }
+
+    const sql = "UPDATE customerapplication SET stat = ? WHERE id = ?";
+
+    con.query(sql, [stat, id], (err, results) => {
+        if (err) {
+            console.error('Database query error:', err);
+            return res.status(500).json({ success: false, message: 'Database error' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Application not found.' });
+        }
+
+        res.status(200).json({ success: true, message: 'Status updated successfully.' });
+    });
+});
+app.get('/getstatus/:id', (req, res) => {
+  const applicationid = req.params.id;
+  const sql = "SELECT stat FROM customerapplications WHERE id = ?"; // Use your table name and column names here.
+  con.query(sql, [applicationid], (err, results) => {
+    if (err) {
+      res.json({ Status: 'Error', Message: 'Database error' });
+    } else {
+      res.json({ Status: 'Error', Message: 'Application not found.' });
+    }
+  });
+});

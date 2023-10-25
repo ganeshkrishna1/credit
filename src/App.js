@@ -4,6 +4,7 @@ import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 import Home from './components/Home/Home';
 import Status from './components/Status/Status';
+import Admin from './components/Admin/Admin';
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +14,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<Home />} />
         <Route path="/status" element={<Status />} />
+        <Route path="/status/:id" element={<Status />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );

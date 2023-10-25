@@ -12,6 +12,7 @@ function Home() {
     income: '',
     payslip1:'',
     payslip2:'',
+    stat:'Pending',
   });
   const [files, setFiles] = useState({
     payslip1: null,

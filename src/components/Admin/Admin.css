@@ -1,0 +1,55 @@
+
+input[type="text"] {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 80%;
+}
+
+.btn-success {
+    padding: 10px 15px;
+    margin-left: 10px;
+}
+
+/* Table Styles */
+.gridTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 16px;
+    overflow-x: auto;
+}
+
+.gridTable thead {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+.gridTable th, .gridTable td {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+}
+
+.gridTable tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.gridTable tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+    .gridTable {
+        width: 100%;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .btn-success {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
