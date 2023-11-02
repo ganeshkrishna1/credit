@@ -63,7 +63,7 @@ app.post('/application', upload.fields([{ name: 'payslip1' }, { name: 'payslip2'
     const payslip1Path = req.files.payslip1[0].path;
     const payslip2Path = req.files.payslip2[0].path;
 
-    const sql = "INSERT INTO customerapplication (`name`,`dob`,`phone`,`email`,`occupation`,`income`,`payslip1Path`,`payslip2Path`) VALUES (?)";
+    const sql = "INSERT INTO customerapplication (`name`,`dob`,`phone`,`email`,`occupation`,`income`,`payslip1Path`,`payslip2Path`, `stat`) VALUES (?)";
     
     const values = [
         req.body.name,
@@ -73,7 +73,8 @@ app.post('/application', upload.fields([{ name: 'payslip1' }, { name: 'payslip2'
         req.body.occupation,
         req.body.income,
         payslip1Path,
-        payslip2Path
+        payslip2Path,
+        stat
     ];
 
     con.query(sql,[values], (err, data) => {

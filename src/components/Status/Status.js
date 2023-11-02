@@ -75,8 +75,8 @@ function Status() {
       {data.map((val) => {
 
   const currentStatus = val.stat;
-  const isAccepted = currentStatus === 'pending';
-  const buttonText = isAccepted ? 'Accepted' : currentStatus === 'no' ? 'Rejected' : 'Approved';
+  const isAccepted = currentStatus === 'Pending';
+  const buttonText = isAccepted ? 'Pending' : currentStatus === 'no' ? 'Rejected' : 'Approved';
   const buttonColor = isAccepted ? '#39C64D' : currentStatus === 'no' ? 'red' : 'green';
 
   return (

@@ -22,7 +22,7 @@ function Login() {
     const email = values.email;
     const password = values.password;
     if (email === 'admin@gmail.com' && password === 'admin') {
-      navigate('/');
+      navigate('/admin');
       return;  
   }
     if (!email) {
