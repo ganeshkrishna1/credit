@@ -74,7 +74,7 @@ app.post('/application', upload.fields([{ name: 'payslip1' }, { name: 'payslip2'
         req.body.income,
         payslip1Path,
         payslip2Path,
-        stat
+        req.body.stat
     ];
 
     con.query(sql,[values], (err, data) => {
