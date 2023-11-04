@@ -140,3 +140,49 @@ app.get('/getstatus/:id', (req, res) => {
     }
   });
 });
+app.get('/applications-by-occupation', (req, res) => {
+  const sql = "SELECT occupation, COUNT(*) as application_count FROM customerapplication GROUP BY occupation";
+  con.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "An error occurred while fetching data." });
+    }
+    return res.json(result);
+  });
+});
+app.get('/applicants-with-username', (req, res) => {
+  const sql = "SELECT ca.name, u.username FROM customerapplication AS ca INNER JOIN user AS u ON ca.email = u.email";
+  con.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "An error occurred while fetching data." });
+    }
+    return res.json(result);
+  });
+});
+app.get('/applicants-above-average-income', (req, res) => {
+  const sql = "SELECT name, email FROM customerapplication WHERE income > (SELECT AVG(income) FROM customerapplication)";
+  con.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "An error occurred while fetching data." });
+    }
+    return res.json(result);
+  });
+});
+app.get('/applicants-lesser-income-than-all-engineers', (req, res) => {
+  const sql = "SELECT name FROM customerapplication WHERE income < ALL (SELECT income FROM customerapplication WHERE occupation = 'Engineer')";
+  con.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "An error occurred while fetching data." });
+    }
+    return res.json(result);
+  });
+});
+app.get('/applicants-above-average-income-in-same-occupation', (req, res) => {
+  const sql = "SELECT name FROM customerapplication AS ca WHERE ca.income > (SELECT AVG(income) FROM customerapplication WHERE occupation = ca.occupation)";
+  con.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "An error occurred while fetching data." });
+    }
+    return res.json(result);
+  });
+});
+
