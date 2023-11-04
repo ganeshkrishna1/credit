@@ -2,6 +2,7 @@ import React, { useEffect,useState } from "react";
 import axios from "axios";
 import Nav from "../Navigation/nav";
 import "./Admin.css";
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 function Admin() {
     const [originalData, setOriginalData] = useState([]);
     const [data, setFilteredData] = useState([]);
@@ -113,10 +114,28 @@ function Admin() {
         />
         <button className="btn btn-success" type="submit" onClick={handleSearch}>
           Search
-        </button>
+        </button> 
       </div>
     </div>
   </div>
+  <br></br> <div><center>
+                <Link to='/occupationcount' type='button' id='signupLink' className='btn btn-primary rounded-0'>
+                Occupation wise count
+                </Link>
+                <Link to='/username' type='button' id='signupLink' className='btn btn-primary rounded-0'>
+                Admins List
+                </Link>
+                <Link to='/averageincome' type='button' id='signupLink' className='btn btn-primary rounded-0'>
+                Above average income
+                </Link>
+                <Link to='/lesserincome' type='button' id='signupLink' className='btn btn-primary rounded-0'>
+                Lesser Income Customers
+                </Link>
+                <Link to='/sameincome' type='button' id='signupLink' className='btn btn-primary rounded-0'>
+                Above average income in same occupation
+                </Link>
+                </center>
+                </div>
         <br></br>
   {data.length > 0 ? (
     <center>

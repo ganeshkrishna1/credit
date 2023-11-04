@@ -6,6 +6,10 @@ import Home from './components/Home/Home';
 import Status from './components/Status/Status';
 import Admin from './components/Admin/Admin';
 import Statistics from './components/Admin/statistics';
+import Statisticsusername from './components/Admin/statisticsusername';
+import Statisticsaverageincome from './components/Admin/statisticsaverageincome';
+import Statisticslesserincome from './components/Admin/statisticslesserincome';
+import Statisticssame from './components/Admin/statisticssame';
 function App() {
   return (
     <BrowserRouter>
@@ -17,7 +21,11 @@ function App() {
         <Route path="/status" element={<Status />} />
         <Route path="/status/:id" element={<Status />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/statistics" element={<Statistics />} />
+        <Route path="/occupationcount" element={<Statistics />} />
+        <Route path="/username" element={<Statisticsusername />} />
+        <Route path="/averageincome" element={<Statisticsaverageincome />} />
+        <Route path="/lesserincome" element={<Statisticslesserincome />} />
+        <Route path="/sameincome" element={<Statisticssame />} />
       </Routes>
     </BrowserRouter>
   );
