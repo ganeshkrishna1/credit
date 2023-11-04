@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2023 at 04:31 PM
+-- Generation Time: Nov 04, 2023 at 06:05 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -84,20 +84,41 @@ CREATE TABLE `customerapplication` (
 --
 
 INSERT INTO `customerapplication` (`id`, `name`, `dob`, `phone`, `email`, `occupation`, `income`, `date`, `payslip1Path`, `payslip2Path`, `stat`) VALUES
-(1, 'Ganesh', '26/07/2002', '1234567890', '', 'Software ', '500000', '2023-10-25 21:35:23', '', 0, 'no'),
-(2, 'Krishna', '12/07/2001', '987654321', '123@gmail.com', 'Business', '50000', '2023-10-25 21:53:24', '', 0, 'yes'),
-(3, 'ganesh', '26/07/2002', '1234567890', '123@gmail.com', 'Job', '50000', '2023-10-25 22:22:34', 'uploads\\1698252753994-IT 7103 Mid Term Q', 0, 'no'),
-(4, 'Akash', '1/07/2001', '123456799', 'abc@gmail.com', 'engineer', '80000', '2023-10-26 00:17:38', 'uploads\\1698259658437-annotated-sprint2-', 0, 'no'),
-(7, 'Sample 2', '121312', '121212', '12121@gmail.com', 'sfff', '1213', '2023-11-02 20:57:43', 'uploads\\1698938863629-Database+-+Part+II', 0, 'Pending');
+(1, 'Ganesh', '26/07/2002', '1234567890', '', 'Software ', '500000', '2023-10-25 21:35:23', '', 0, 'yes'),
+(3, 'ganesh', '26/07/2002', '1234567890', '123@gmail.com', 'Job', '50000', '2023-10-25 22:22:34', 'uploads\\1698252753994-IT 7103 Mid Term Q', 0, 'yes'),
+(4, 'Akash', '1/07/2001', '123456799', 'abc@gmail.com', 'engineer', '80000', '2023-10-26 00:17:38', 'uploads\\1698259658437-annotated-sprint2-', 0, 'yes'),
+(6, 'hiii', '12345', '1234567890', '1234@gmail.com', 'student', '100000', '2023-11-02 08:55:52', 'uploads\\1698895552868-DB Project Part-II', 0, 'no'),
+(7, 'aasas', '12345', '1234678905', '1235@gmail.com', 'ns', '200000', '2023-11-02 08:58:29', 'uploads\\1698895709912-DB Project Part-II', 0, 'yes'),
+(8, 'Hi', '45666', '4567891230', '1234@gmail.com', 'asdfg', '225805', '2023-11-02 09:01:08', 'uploads\\1698895868334-Instructions+for+W', 0, 'pending'),
+(9, 'ahagaga', '13247', '1234567890', '111@gmail.com', 'abcdd', '50000', '2023-11-02 09:08:34', 'uploads\\1698896314691-Instructions+for+W', 0, 'pending'),
+(10, 'boom', '12/03/2002', '1234569870', '12354@gmail.com', 'ITBT', '50000', '2023-11-04 07:30:45', 'uploads\\1699063244960-1-b3f3a555-9075-4f', 0, 'no'),
+(13, 'a', '12/02/2001', '1236547890', '1@gmail.com', 'Engineer', '500000', '2023-11-04 07:37:11', 'uploads\\1699063631154-1-b3f3a555-9075-4f', 0, 'Pending');
 
 --
 -- Triggers `customerapplication`
 --
 DELIMITER $$
+CREATE TRIGGER `replace_customer_application_view` AFTER INSERT ON `customerapplication` FOR EACH ROW BEGIN
+    REPLACE INTO `customer_application_view` (
+        SELECT
+            `customerapplication`.`id` AS `id`,
+            `customerapplication`.`name` AS `name`,
+            `customerapplication`.`dob` AS `dob`,
+            `customerapplication`.`phone` AS `phone`,
+            `customerapplication`.`email` AS `email`,
+            `customerapplication`.`occupation` AS `occupation`,
+            `customerapplication`.`income` AS `income`,
+            `customerapplication`.`payslip1Path` AS `payslip1Path`,
+            `customerapplication`.`payslip2Path` AS `payslip2Path`,
+            `customerapplication`.`stat` AS `stat`
+        FROM `customerapplication`
+    );
+END
+$$
+DELIMITER ;
+DELIMITER $$
 CREATE TRIGGER `update_customerapplication_status` AFTER UPDATE ON `customerapplication` FOR EACH ROW BEGIN
     IF NEW.stat != OLD.stat THEN
-        -- You can add your desired actions or logic here when the status changes.
-        -- For example, you can log the status change in another table.
         INSERT INTO status_log (application_id, old_status, new_status, change_timestamp)
         VALUES (NEW.id, OLD.stat, NEW.stat, NOW());
     END IF;
@@ -151,6 +172,47 @@ CREATE TABLE `roles` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `status_log`
+--
+
+CREATE TABLE `status_log` (
+  `log_id` int(11) NOT NULL,
+  `application_id` int(11) DEFAULT NULL,
+  `old_status` varchar(30) DEFAULT NULL,
+  `new_status` varchar(30) DEFAULT NULL,
+  `change_timestamp` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `status_log`
+--
+
+INSERT INTO `status_log` (`log_id`, `application_id`, `old_status`, `new_status`, `change_timestamp`) VALUES
+(1, 3, 'no', 'yes', '2023-11-04 07:23:40'),
+(2, 3, 'yes', 'no', '2023-11-04 07:23:41'),
+(3, 3, 'no', 'yes', '2023-11-04 07:23:43'),
+(4, 3, 'yes', 'no', '2023-11-04 07:23:44'),
+(5, 3, 'no', 'yes', '2023-11-04 07:24:16'),
+(6, 1, 'no', 'yes', '2023-11-04 07:25:58'),
+(7, 6, '', 'yes', '2023-11-04 07:26:00'),
+(8, 6, 'yes', 'no', '2023-11-04 07:26:01'),
+(9, 10, 'Pending', 'yes', '2023-11-04 07:31:30'),
+(10, 10, 'yes', 'no', '2023-11-04 07:31:31'),
+(11, 10, 'no', 'yes', '2023-11-04 07:31:31'),
+(12, 10, 'yes', 'no', '2023-11-04 07:31:32'),
+(13, 4, 'no', 'yes', '2023-11-04 07:32:51'),
+(14, 4, 'yes', 'no', '2023-11-04 07:32:51'),
+(15, 4, 'no', 'yes', '2023-11-04 07:49:10'),
+(16, 4, 'yes', 'no', '2023-11-04 07:49:10'),
+(17, 4, 'no', 'yes', '2023-11-04 10:34:16'),
+(18, 6, 'no', 'yes', '2023-11-04 10:34:16'),
+(19, 6, 'yes', 'no', '2023-11-04 10:34:17'),
+(20, 6, 'no', 'yes', '2023-11-04 10:34:19'),
+(21, 6, 'yes', 'no', '2023-11-04 10:34:20');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -168,9 +230,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`userid`, `name`, `username`, `email`, `password`) VALUES
 (1, 'ganesh', 'ganesh123', 'admin@gmail.com', 'admin'),
-(2, '', '', '', ''),
-(3, '', '', '', ''),
-(4, '', '', '', '');
+(5, 'ganesh', 'ganesh123', '123@gmail.com', 'admin');
 
 -- --------------------------------------------------------
 
@@ -216,6 +276,13 @@ ALTER TABLE `roles`
   ADD PRIMARY KEY (`role_id`);
 
 --
+-- Indexes for table `status_log`
+--
+ALTER TABLE `status_log`
+  ADD PRIMARY KEY (`log_id`),
+  ADD KEY `application_id` (`application_id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -241,7 +308,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `customerapplication`
 --
 ALTER TABLE `customerapplication`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `payslips`
@@ -256,10 +323,26 @@ ALTER TABLE `roles`
   MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `status_log`
+--
+ALTER TABLE `status_log`
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `status_log`
+--
+ALTER TABLE `status_log`
+  ADD CONSTRAINT `status_log_ibfk_1` FOREIGN KEY (`application_id`) REFERENCES `customerapplication` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
